@@ -44,6 +44,7 @@ function lanIp(): string | undefined {
 }
 
 const joinUrl = () => {
+  if (process.env.JOIN_URL) return new URL("/join", process.env.JOIN_URL).href;
   const ip = lanIp();
   return ip ? `http://${ip}:${PORT}/join` : null;
 };
