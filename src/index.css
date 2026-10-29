@@ -1,0 +1,681 @@
+:root {
+  --night: #0b0612;
+  --purple: #2a0f3d;
+  --orange: #ff7a18;
+  --ember: #ffb347;
+  --bone: #f4ecd8;
+  --blood: #c1121f;
+  --slime: #9dff5c;
+  --display: "Creepster", fantasy;
+  --body: "Special Elite", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--night);
+  color: var(--bone);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Display ---------- */
+
+.display {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.shake-root {
+  position: absolute;
+  inset: 0;
+}
+
+.bg > * {
+  position: absolute;
+  pointer-events: none;
+}
+
+.sky {
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 10%, #3d1659 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, #4a1a05 0%, transparent 50%),
+    linear-gradient(180deg, #120720 0%, var(--night) 70%);
+}
+
+.moon {
+  top: 6vh;
+  left: 7vw;
+  width: 14vmin;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8e1, #f2d98c 60%, #d9b45a);
+}
+
+/* A pre-blurred gradient pulsing via opacity/scale instead of an animated box-shadow,
+   which would repaint a huge blur every frame. */
+.moon-glow {
+  top: calc(6vh - 21vmin);
+  left: calc(7vw - 21vmin);
+  width: 56vmin;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f2d98c66 0%, #f2d98c33 18%, #f2d98c14 40%, transparent 70%);
+  opacity: 0.75;
+  animation: moon-glow 6s ease-in-out infinite;
+}
+
+@keyframes moon-glow {
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.embers {
+  inset: 0;
+  overflow: hidden;
+}
+
+.ember {
+  position: absolute;
+  top: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color) 30%, transparent 70%);
+  animation-name: ember-rise, ember-sway, ember-flicker;
+  animation-timing-function: linear, ease-in-out, ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: normal, alternate, alternate;
+}
+
+@keyframes ember-rise {
+  to {
+    translate: 0 -110vh;
+  }
+}
+
+@keyframes ember-sway {
+  from {
+    transform: translateX(-3vw);
+  }
+  to {
+    transform: translateX(3vw);
+  }
+}
+
+@keyframes ember-flicker {
+  from {
+    opacity: 0.15;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+.bat {
+  left: 0;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.bat.ltr {
+  animation-name: bat-ltr;
+}
+
+.bat.rtl {
+  animation-name: bat-rtl;
+}
+
+.bat.rtl .bat-bob > * {
+  transform: scaleX(-1);
+}
+
+@keyframes bat-ltr {
+  from {
+    transform: translateX(-20vw);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
+@keyframes bat-rtl {
+  from {
+    transform: translateX(110vw);
+  }
+  to {
+    transform: translateX(-20vw);
+  }
+}
+
+.bat-bob {
+  width: 100%;
+  height: 100%;
+  animation-name: bat-bob;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes bat-bob {
+  20% {
+    transform: translateY(-60px);
+  }
+  40% {
+    transform: translateY(40px);
+  }
+  60% {
+    transform: translateY(-30px);
+  }
+  80% {
+    transform: translateY(20px);
+  }
+}
+
+.fog {
+  left: 0;
+  width: 200%;
+  height: 45vh;
+  bottom: -5vh;
+  background:
+    radial-gradient(ellipse 25% 40% at 10% 60%, #b9a6d633, transparent 70%),
+    radial-gradient(ellipse 30% 35% at 35% 70%, #b9a6d62a, transparent 70%),
+    radial-gradient(ellipse 25% 45% at 60% 55%, #b9a6d633, transparent 70%),
+    radial-gradient(ellipse 30% 35% at 85% 70%, #b9a6d62a, transparent 70%);
+  animation: drift 60s linear infinite;
+}
+
+.fog-front {
+  height: 30vh;
+  bottom: -8vh;
+  opacity: 0.8;
+  animation-duration: 38s;
+  animation-direction: reverse;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.graveyard {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 22vh;
+}
+
+/* The thread stretches while the spider rides its end down, so the spider itself
+   is never scaled. */
+.spider {
+  top: 0;
+  right: 32vw;
+  width: 2px;
+  height: 22vh;
+  transform-origin: top;
+  animation: swing 7s ease-in-out infinite;
+}
+
+.spider-thread {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#ffffff00, #ffffff66);
+  transform-origin: top;
+  animation: stretch 7s ease-in-out infinite;
+}
+
+.spider-hang {
+  position: absolute;
+  top: calc(22vh - 10vmin);
+  left: -10vmin;
+  width: 20vmin;
+  height: 20vmin;
+  animation: descend 7s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+}
+
+@keyframes stretch {
+  50% {
+    transform: scaleY(1.35);
+  }
+}
+
+@keyframes descend {
+  50% {
+    transform: translateY(7.7vh);
+  }
+}
+
+.vignette {
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, #000000cc 100%);
+}
+
+.flicker {
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  animation: flicker 13s steps(1) infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  91% {
+    opacity: 0.35;
+  }
+  92% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.2;
+  }
+  94% {
+    opacity: 0;
+  }
+}
+
+.stage {
+  position: absolute;
+  inset: 0 0 18vh;
+  display: grid;
+  place-items: center;
+  padding: 4vh 8vw 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 64vw;
+}
+
+.card-lottie {
+  width: 26vmin;
+  height: 26vmin;
+}
+
+.bob {
+  width: 100%;
+  height: 100%;
+  animation: bob 4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(-2vmin) rotate(2deg);
+  }
+}
+
+.card-kicker {
+  margin: 1vh 0 2vh;
+  font-size: 2.4vmin;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: var(--slime);
+  text-shadow: 0 0 12px #9dff5c88;
+}
+
+.card-text {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--orange);
+}
+
+.card-text.lg {
+  font-size: 11vmin;
+}
+.card-text.md {
+  font-size: 8.5vmin;
+}
+.card-text.sm {
+  font-size: 6.5vmin;
+}
+
+.word {
+  display: inline-block;
+  margin: 0 0.12em;
+}
+
+/* Animating text-shadow repaints the text every frame. Instead the dim glow is
+   static and a shadow-only copy (from data-text) with the bright glow fades in and
+   out, which the compositor handles. */
+.glow {
+  position: relative;
+  text-shadow: 0 0 10px #ff7a1899, 0 0 40px #ff3d0066, 0 4px 0 #3a0b00;
+}
+
+.glow::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  text-shadow: 0 0 18px #ffb347cc, 0 0 70px #ff3d0099;
+  opacity: 0;
+  pointer-events: none;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  50% {
+    opacity: 1;
+  }
+}
+
+.countdown {
+  position: absolute;
+  left: 50%;
+  bottom: 4vh;
+  transform: translateX(-50%);
+  width: min(60vw, 900px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 1vh 2vw;
+}
+
+.countdown-label {
+  font-size: 2.6vmin;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  opacity: 0.75;
+}
+
+.countdown-time {
+  font-size: 7vmin;
+  font-variant-numeric: tabular-nums;
+  color: var(--ember);
+  text-shadow: 0 0 20px #ff7a1866;
+}
+
+.candle {
+  grid-column: 1 / -1;
+  height: 1.4vmin;
+  border-radius: 99px;
+  background: #ffffff14;
+  overflow: hidden;
+}
+
+.candle-fill {
+  height: 100%;
+  transform-origin: left;
+  animation: burn linear both;
+  background: linear-gradient(90deg, #7a1fa2, var(--orange), #ffe08a);
+  box-shadow: 0 0 20px var(--orange);
+}
+
+@keyframes burn {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.countdown.urgent .countdown-time {
+  color: var(--blood);
+  text-shadow: 0 0 24px #ff0000aa;
+  animation: shake 0.4s linear infinite;
+}
+
+.countdown.urgent .candle-fill {
+  background: linear-gradient(90deg, #5a0008, var(--blood));
+}
+
+@keyframes shake {
+  25% {
+    transform: translate(-3px, 2px) rotate(-2deg);
+  }
+  75% {
+    transform: translate(3px, -2px) rotate(2deg);
+  }
+}
+
+.final-count {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: 60vmin;
+  color: var(--blood);
+  text-shadow: 0 0 80px #ff0000;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.qr {
+  position: absolute;
+  right: 2.5vw;
+  top: 4vh;
+  display: flex;
+  align-items: center;
+  gap: 2.25vw;
+  padding: 1.8vmin;
+  border-radius: 3vmin;
+  background: #0b0612cc;
+  border: 1px solid #ffffff1f;
+}
+
+.qr-code svg {
+  display: block;
+  width: 24vmin;
+  height: 24vmin;
+  border-radius: 1.5vmin;
+}
+
+.qr-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9vmin;
+  font-size: 2.7vmin;
+  max-width: 21vmin;
+}
+
+.qr-text strong {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 7.5vmin;
+  color: var(--slime);
+}
+
+.qr-guests {
+  color: var(--ember);
+}
+
+.popups {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.popup {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 1vmin;
+}
+
+.popup.flip {
+  flex-direction: row-reverse;
+}
+
+.popup-lottie {
+  flex: none;
+  width: 18vmin !important;
+  height: 18vmin !important;
+}
+
+.popup-bubble {
+  padding: 1.4vmin 2vmin;
+  border-radius: 2vmin;
+  background: var(--bone);
+  color: #1a0b24;
+  font-size: 2.8vmin;
+  line-height: 1.25;
+  box-shadow: 0 0 30px #ff7a1866;
+  width: max-content;
+  max-width: 22vw;
+  overflow-wrap: break-word;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  background: #e8e4ff;
+  pointer-events: none;
+  z-index: 6;
+}
+/* ---------- Guest phone page ---------- */
+
+.join {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: max(24px, env(safe-area-inset-top)) 20px 32px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #3d1659 0%, transparent 60%),
+    var(--night);
+}
+
+.join-header {
+  text-align: center;
+}
+
+.join-header h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 44px;
+  color: var(--orange);
+}
+
+.join-status {
+  margin-top: 4px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.join-status.on {
+  color: var(--ember);
+  opacity: 1;
+}
+
+.join-now {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #ffffff0d;
+  border: 1px solid #ffffff1f;
+}
+
+.join-now-label,
+.join-now-time {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+
+.join-now-label {
+  color: var(--slime);
+  text-shadow: 0 0 12px #9dff5c88;
+}
+
+.join-now-time {
+  color: var(--ember);
+  font-variant-numeric: tabular-nums;
+}
+
+.join-now-text {
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--orange);
+}
+
+.join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.join-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #ffffff33;
+  background: #00000066;
+  color: var(--bone);
+  font: inherit;
+  font-size: 18px;
+}
+
+.join-form input:focus {
+  outline: 2px solid var(--orange);
+}
+
+.join-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px 20px;
+  border: 0;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #ff9a3c, #e85d04 60%, #9d2c00);
+  color: #1a0700;
+  font-family: var(--display);
+  font-size: 30px;
+  box-shadow: 0 8px 30px #ff7a1855, inset 0 -4px 0 #00000040;
+  cursor: pointer;
+}
+
+.join-btn:disabled {
+  filter: grayscale(0.7) brightness(0.6);
+}
+
+.join-btn-lottie {
+  width: 140px !important;
+  height: 140px !important;
+}
+
+.join-sent {
+  text-align: center;
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--slime);
+  text-shadow: 0 0 12px #9dff5c88;
+}

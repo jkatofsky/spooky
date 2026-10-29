@@ -1,0 +1,35 @@
+{
+  "name": "halloween-party-2026",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "npm run build && npm run serve",
+    "serve": "node --experimental-strip-types --disable-warning=ExperimentalWarning server/index.ts",
+    "build": "tsc -b && vite build",
+    "dev": "vite",
+    "test": "vitest run",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "@fontsource/creepster": "^5.3.0",
+    "@fontsource/special-elite": "^5.3.0",
+    "@lottiefiles/dotlottie-react": "^0.20.0",
+    "motion": "^14.7.1",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/ws": "^8.18.2",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.89.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}
